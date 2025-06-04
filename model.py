@@ -1,14 +1,43 @@
 import torch
-import torch.nn as nn
+import torch.nn as nn  # Основной модуль PyTorch для нейросетей
+
 
 class DronePolicy(nn.Module):
+    """Нейросетевая политика для принятия решений агентом-дроном.
+
+    Принимает на вход вектор состояния (наблюдения) окружения
+    и возвращает вектор действий (управляющих сигналов).
+
+    Args:
+        input_dim (int): Размерность вектора состояния. По умолчанию 8.
+        output_dim (int): Размерность вектора действий. По умолчанию 8.
+    """
+
     def __init__(self, input_dim=8, output_dim=8):
-        super().__init__()
+        """Инициализация архитектуры сети."""
+        super().__init__()  # Инициализация родительского класса nn.Module
+
+        # Определение последовательной модели:
         self.net = nn.Sequential(
+            # Полносвязный слой с input_dim входами и 64 выходами
             nn.Linear(input_dim, 64),
+
+            # Активация ReLU для нелинейности
             nn.ReLU(),
+
+            # Выходной полносвязный слой с 64 входами и output_dim выходами
             nn.Linear(64, output_dim)
+            # Примечание: Нет активации на выходе, предполагается raw logits
+            # или прямое использование как управляющих сигналов
         )
 
     def forward(self, x):
-        return self.net(x)
+        """Прямой проход сети.
+
+        Args:
+            x (torch.Tensor): Входной тензор состояния [batch_size, input_dim]
+
+        Returns:
+            torch.Tensor: Выходной тензор действий [batch_size, output_dim]
+        """
+        return self.net(x)  # Применяем последовательно все слои сети
