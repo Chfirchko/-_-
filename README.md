@@ -15,4 +15,4 @@
 1. Установите Python 3.11  
 2. Установите зависимости:  
    ```bash
-   pip install numpy PyQt6
+   pip install numpy PyQt6 torch
